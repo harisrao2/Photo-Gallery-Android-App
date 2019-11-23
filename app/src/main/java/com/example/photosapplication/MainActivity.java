@@ -1,18 +1,29 @@
 package com.example.photosapplication;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    String albumName = "";
+    ArrayList<Album> albums = new ArrayList<Album>();
+    ArrayAdapter<Album> adapter = new ArrayAdapter<Album>(this, android.R.layout.simple_list_item_1,albums);
+    ListView lv_albums = (ListView) findViewById(R.id.lv_albums);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,14 +32,49 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+
+        FloatingActionButton b_newAlbum = findViewById(R.id.b_newAlbum);
+        b_newAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                lv_albums.setAdapter(adapter);
+                createNewAlbum();
+
             }
         });
+    }
+
+    public void createNewAlbum(){
+        //making a new Alert for Create new Album
+        AlertDialog.Builder newAlbumAlert = new AlertDialog.Builder(this);
+        newAlbumAlert.setTitle("Create a new Album");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        newAlbumAlert.setView(input);
+
+        //making buttons for alert
+        newAlbumAlert.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                albumName = input.getText().toString();
+                System.out.println(albumName);
+                Album a = new Album(albumName);
+                albums.add(a);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        newAlbumAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+               dialog.cancel();
+            }
+        });
+        newAlbumAlert.show();
+
+
     }
 
     @Override
