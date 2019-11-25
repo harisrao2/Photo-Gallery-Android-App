@@ -6,6 +6,7 @@ import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -50,10 +51,32 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 createNewAlbum();
-
-
             }
         });
+
+        lv_albums.setOnItemClickListener(
+            new AdapterView.OnItemClickListener(){
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View view, int position, long id){
+                    // making alert for Album options
+                    showOptions(position);
+                }
+            });
+    }
+
+    public void showOptions(final int position){
+        AlertDialog.Builder optionsAlert = new AlertDialog.Builder(this);
+        optionsAlert.setTitle("Choose an option");
+
+        optionsAlert.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                adapter.remove(albums.get(position).getAlbumName());
+                albums.remove(position);
+            }
+        });
+
+        optionsAlert.show();
     }
 
 
