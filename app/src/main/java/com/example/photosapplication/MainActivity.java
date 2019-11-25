@@ -1,6 +1,7 @@
 package com.example.photosapplication;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         lv_albums = (ListView) findViewById(R.id.lv_albums);
         b_newAlbum = findViewById(R.id.b_newAlbum);
-        b_save = findViewById(R.id.b_save);
+        b_save = findViewById(R.id.bp_save);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, albumNames);
         lv_albums.setAdapter(adapter);
 
@@ -133,6 +134,14 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder optionsAlert = new AlertDialog.Builder(this);
         optionsAlert.setTitle("Choose an option for album \""+albums.get(position).getAlbumName()+"\"");
 
+
+        optionsAlert.setNeutralButton("Open", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                openAlbum();
+            }
+        });
+
         optionsAlert.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -148,7 +157,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         optionsAlert.show();
+    }
+
+    public void openAlbum(){
+        Intent intent = new Intent(MainActivity.this, PhotosScene.class);
+        startActivity(intent);
     }
 
     public void promptRename(final int position){
@@ -181,10 +196,7 @@ public class MainActivity extends AppCompatActivity {
         //return input.getText().toString();
     }
 
-
     public void createNewAlbum(){
-
-
         //making a new Alert for Create new Album
         AlertDialog.Builder newAlbumAlert = new AlertDialog.Builder(this);
         newAlbumAlert.setTitle("Create a new Album");
