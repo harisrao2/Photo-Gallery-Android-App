@@ -1,8 +1,11 @@
 package com.example.photosapplication;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,9 +36,12 @@ public class MainActivity extends AppCompatActivity {
 
     FloatingActionButton b_newAlbum;// = findViewById(R.id.b_newAlbum);
 
+    FloatingActionButton b_save;
+
     ArrayAdapter<String> adapter;// = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, albumNames);
 
 
+    SharedPreferences sharedpref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +50,19 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
+
         lv_albums = (ListView) findViewById(R.id.lv_albums);
         b_newAlbum = findViewById(R.id.b_newAlbum);
+        b_save = findViewById(R.id.b_save);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, albumNames);
-
         lv_albums.setAdapter(adapter);
+
+        load();
+        loadListView();
+        System.out.println("printing after load : ");
+        printAlbums();
 
         b_newAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +70,15 @@ public class MainActivity extends AppCompatActivity {
                 createNewAlbum();
             }
         });
+
+        b_save.setOnClickListener (new View.OnClickListener(){
+            @Override
+            public void onClick (View view) {
+                save();
+                finish();
+            }
+        });
+
 
         lv_albums.setOnItemClickListener(
             new AdapterView.OnItemClickListener(){
@@ -62,6 +88,45 @@ public class MainActivity extends AppCompatActivity {
                     showOptions(position);
                 }
             });
+    }
+
+    public void save(){
+        //sharedpref = getSharedPreferences("shared preferences",MODE_PRIVATE);
+        sharedpref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        SharedPreferences.Editor editor = sharedpref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(albums);
+        Log.d("TAG","saving albums = " + albums);
+        editor.putString("albums", json);
+        editor.apply();
+    }
+
+    public void load(){
+        //sharedpref = getSharedPreferences("shared preferences",MODE_PRIVATE);
+        sharedpref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedpref.getString("albums",null);
+        Type type = new TypeToken<ArrayList<Album>>(){}.getType();
+        albums = gson.fromJson(json, type);
+        if(albums == null){
+            albums = new ArrayList<Album>();
+        }
+        Log.d("TAG","loading albums = " + albums);
+
+    }
+
+    public void printAlbums(){
+        for (int i = 0;i<albums.size();i++){
+            System.out.print("i: " + albums.get(i).getAlbumName()+", ");
+        }
+
+    }
+
+    public void loadListView(){
+        for (int i = 0 ;i<albums.size();i++){
+            adapter.add(albums.get(i).getAlbumName());
+        }
+        adapter.notifyDataSetChanged();
     }
 
     public void showOptions(final int position){
@@ -170,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings  ) {
             return true;
         }
 
