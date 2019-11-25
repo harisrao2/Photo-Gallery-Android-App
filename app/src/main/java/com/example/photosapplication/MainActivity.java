@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showOptions(final int position){
         AlertDialog.Builder optionsAlert = new AlertDialog.Builder(this);
-        optionsAlert.setTitle("Choose an option");
+        optionsAlert.setTitle("Choose an option for album \""+albums.get(position).getAlbumName()+"\"");
 
         optionsAlert.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
             @Override
@@ -76,7 +76,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        optionsAlert.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                promptRename(position);
+            }
+        });
+
         optionsAlert.show();
+    }
+
+    public void promptRename(final int position){
+        AlertDialog.Builder rename = new AlertDialog.Builder(this);
+        rename.setTitle("Rename album \""+albums.get(position).getAlbumName()+"\" to :");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        rename.setView(input);
+
+        rename.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                adapter.remove(albums.get(position).getAlbumName());
+                albums.get(position).setAlbumName(input.getText().toString());
+                adapter.insert(albums.get(position).getAlbumName(),position);
+
+            }
+        });
+
+
+        rename.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        rename.show();
+
+        //return input.getText().toString();
     }
 
 
