@@ -10,7 +10,7 @@ public class Photo {
         this.imageBitmap = imageBitmap;
         this.caption = caption;
     }
-/*
+
     public void setBitmap(Bitmap imageBitmap){
         this.imageBitmap = imageBitmap;
     }
@@ -18,7 +18,7 @@ public class Photo {
     public Bitmap getBitmap() {
         return this.imageBitmap;
     }
-*/
+
     public void setCaption(String caption){
         this.caption = caption;
     }
