@@ -1,32 +1,36 @@
 package com.example.photosapplication;
 
+import android.app.Activity;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class PhotosAdapter extends BaseAdapter {
+public class PhotosAdapter extends ArrayAdapter<Photo> {
 
-    private Context mContext;
+    private Context context;
 
-    public ArrayList <Integer> photosArray = new ArrayList<Integer>();
+    public ArrayList <Photo> photoList = new ArrayList<Photo>();
 
-    public PhotosAdapter (Context mContext){
-        this.mContext = mContext;
+    public PhotosAdapter (Activity context, ArrayList<Photo> photoList){
+        super(context, R.layout.photo, photoList);
+        this.context = context;
+        this.photoList = photoList;
     }
 
     @Override
     public int getCount(){
-        return photosArray.size();
+        return photoList.size();
     }
 
     @Override
-    public Object getItem (int position){
-        return photosArray;
+    public Photo getItem (int position){
+        return photoList.get(position);
     }
     @Override
     public long getItemId(int position){
@@ -35,12 +39,16 @@ public class PhotosAdapter extends BaseAdapter {
 
     @Override
     public View getView (int position, View convertView , ViewGroup parent){
-        ImageView imageView = new ImageView (mContext);
-        //imageView.setImageResource(photosArray[position]);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setLayoutParams(new GridView.LayoutParams(340,350));
+        if(convertView == null){
+            LayoutInflater LI = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = (View) LI.inflate(R.layout.photo, parent, false);
 
-        return imageView;
+        }
+        TextView tv = (TextView) convertView.findViewById(R.id.caption);
+        ImageView iv =  (ImageView) convertView.findViewById(R.id.image);
+
+        return convertView;
+
     }
 
 }
