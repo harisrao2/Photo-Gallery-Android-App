@@ -39,6 +39,8 @@ public class PhotosScene extends AppCompatActivity {
 
     FloatingActionButton bp_save;
 
+     ArrayList<Album> albums;
+
     private static int PICK_IMAGE_REQUEST = 1;
 
     Uri imageUri;
@@ -48,16 +50,26 @@ public class PhotosScene extends AppCompatActivity {
 
     SharedPreferences sharedpref;
 
+    String albumName;
+
+    String Sindex;
+    int index;
 
     @Override
     protected void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photos);
+        albums = MainActivity.getData();
+        printAlbums(albums);
+        Sindex = getIntent().getStringExtra("index");
+        index = Integer.parseInt(Sindex);
+        albums.get(index).setPhotoList(photoList);
         load();
+        System.out.println("ALBUMNAMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE :::" + albums.get(index).getAlbumName());
         b_back = findViewById(R.id.b_back);
         b_addPhoto = findViewById(R.id.b_addphoto);
         gridView = (GridView) findViewById(R.id.photos_grid);
-        adapter = new PhotosAdapter(this, photoList);
+        adapter = new PhotosAdapter(this, albums.get(index).getPhotoList());
         gridView.setAdapter(adapter);
 
         //load();
@@ -80,9 +92,17 @@ public class PhotosScene extends AppCompatActivity {
 
 
 
+
+
     }
 
 
+    public void printAlbums(ArrayList<Album> albums){
+        for (int i = 0 ;i <albums.size();i++){
+            System.out.println("PRINTIGN ALBUMS ::::::::::::::::::: " + albums.get(i).getAlbumName());
+        }
+
+    }
 
     private void openFileChooser(){
         Intent intent = new Intent();
@@ -109,8 +129,8 @@ public class PhotosScene extends AppCompatActivity {
                 e.printStackTrace();
             }
             Photo p = new Photo(imageBitmap,caption);
-            photoList.add(p);
-            System.out.println("checkkkkkkkkkkkkkkkkk :::::::::: " + photoList.get(0));
+            albums.get(index).getPhotoList().add(p);
+            System.out.println("checkkkkkkkkkkkkkkkkk :::::::::: " + albums.get(index).getPhotoList().get(0));
             adapter.notifyDataSetChanged();
 
 
@@ -123,9 +143,9 @@ public class PhotosScene extends AppCompatActivity {
         sharedpref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         SharedPreferences.Editor editor = sharedpref.edit();
         Gson gson = new Gson();
-        String json = gson.toJson(photoList);
-        Log.d("TAG","saving albums = " + photoList);
-        editor.putString("photoList", json);
+        String json = gson.toJson(albums);
+        Log.d("TAG","saving albums = " + albums);
+        editor.putString("albums", json);
         editor.apply();
     }
 
@@ -133,13 +153,15 @@ public class PhotosScene extends AppCompatActivity {
         //sharedpref = getSharedPreferences("shared preferences",MODE_PRIVATE);
         sharedpref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         Gson gson = new Gson();
-        String json = sharedpref.getString("photoList",null);
-        Type type = new TypeToken<ArrayList<Photo>>(){}.getType();
-        photoList = gson.fromJson(json, type);
-        if(photoList == null){
-            photoList = new ArrayList<Photo>();
+        String json = sharedpref.getString("albums",null);
+        Type type = new TypeToken<ArrayList<Album>>(){}.getType();
+        albums = gson.fromJson(json, type);
+        if(albums == null){
+            albums = new ArrayList<Album>();
         }
-        Log.d("TAG","loading albums = " + photoList);
+        Log.d("TAG","loading albums = " + albums);
 
     }
+
+
 }

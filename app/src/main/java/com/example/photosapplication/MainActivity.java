@@ -31,13 +31,14 @@ public class MainActivity extends AppCompatActivity {
     String albumName = "";
 
     ArrayList<String> albumNames = new ArrayList<String>();
-    ArrayList<Album> albums = new ArrayList<Album>();
+    static ArrayList<Album> albums = new ArrayList<Album>();
 
     ListView lv_albums; // = (ListView) findViewById(R.id.lv_albums);
 
     FloatingActionButton b_newAlbum;// = findViewById(R.id.b_newAlbum);
 
     FloatingActionButton b_save;
+
 
     ArrayAdapter<String> adapter;// = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, albumNames);
 
@@ -138,7 +139,8 @@ public class MainActivity extends AppCompatActivity {
         optionsAlert.setNeutralButton("Open", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                openAlbum();
+                save();
+                openAlbum(position);
             }
         });
 
@@ -161,8 +163,9 @@ public class MainActivity extends AppCompatActivity {
         optionsAlert.show();
     }
 
-    public void openAlbum(){
+    public void openAlbum(int position){
         Intent intent = new Intent(MainActivity.this, PhotosScene.class);
+        intent.putExtra("index", String.valueOf(position));
         startActivity(intent);
     }
 
@@ -212,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
                 albumName = input.getText().toString();
                 System.out.println(albumName);
-                Album a = new Album(albumName);
+                Album a = new Album(albumName, new ArrayList<Photo>() );
                 albums.add(a);
                 adapter.add(a.getAlbumName());
                 adapter.notifyDataSetChanged();
@@ -253,4 +256,9 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public static ArrayList<Album> getData(){
+        return albums;
+    }
+
 }
