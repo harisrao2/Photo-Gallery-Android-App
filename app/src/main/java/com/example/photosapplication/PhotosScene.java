@@ -10,7 +10,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -39,14 +38,14 @@ public class PhotosScene extends AppCompatActivity {
 
     FloatingActionButton bp_save;
 
-     ArrayList<Album> albums;
+    ArrayList<Album> albums;
 
     private static int PICK_IMAGE_REQUEST = 1;
 
     Uri imageUri;
     PhotosAdapter adapter;
 
-    ArrayList<Photo> photoList = new ArrayList<Photo>();
+    //static ArrayList<Photo> photoList;
 
     SharedPreferences sharedpref;
 
@@ -63,8 +62,8 @@ public class PhotosScene extends AppCompatActivity {
         printAlbums(albums);
         Sindex = getIntent().getStringExtra("index");
         index = Integer.parseInt(Sindex);
-        albums.get(index).setPhotoList(photoList);
-        load();
+        //albums.get(index).setPhotoList(photoList);
+        //load();
         System.out.println("ALBUMNAMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE :::" + albums.get(index).getAlbumName());
         b_back = findViewById(R.id.b_back);
         b_addPhoto = findViewById(R.id.b_addphoto);

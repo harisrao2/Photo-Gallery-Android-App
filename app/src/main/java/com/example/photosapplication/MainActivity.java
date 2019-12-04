@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         optionsAlert.setNeutralButton("Open", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                save();
+                //save();
                 openAlbum(position);
             }
         });
