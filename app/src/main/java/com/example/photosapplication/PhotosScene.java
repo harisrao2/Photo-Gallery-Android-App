@@ -1,5 +1,6 @@
 package com.example.photosapplication;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -9,14 +10,17 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -25,6 +29,7 @@ import java.util.ArrayList;
 public class PhotosScene extends AppCompatActivity {
 
     FloatingActionButton b_back;
+
 
     GridView gridView;
 
@@ -36,9 +41,8 @@ public class PhotosScene extends AppCompatActivity {
 
     FloatingActionButton b_addPhoto;
 
-    FloatingActionButton bp_save;
 
-    ArrayList<Album> albums;
+    static ArrayList<Album> albums;
 
     private static int PICK_IMAGE_REQUEST = 1;
 
@@ -52,7 +56,7 @@ public class PhotosScene extends AppCompatActivity {
     String albumName;
 
     String Sindex;
-    int index;
+    static int index;
 
     @Override
     protected void onCreate (Bundle savedInstanceState){
@@ -67,6 +71,7 @@ public class PhotosScene extends AppCompatActivity {
         System.out.println("ALBUMNAMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE :::" + albums.get(index).getAlbumName());
         b_back = findViewById(R.id.b_back);
         b_addPhoto = findViewById(R.id.b_addphoto);
+
         gridView = (GridView) findViewById(R.id.photos_grid);
         adapter = new PhotosAdapter(this, albums.get(index).getPhotoList());
         gridView.setAdapter(adapter);
@@ -91,9 +96,58 @@ public class PhotosScene extends AppCompatActivity {
 
 
 
+        gridView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener(){
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View view, int position, long id){
+                        // making alert for Album options
+                        showOptions(position);
+                    }
+                });
+
 
 
     }
+
+    public void showOptions(final int position){
+        AlertDialog.Builder optionsAlert = new AlertDialog.Builder(this);
+        optionsAlert.setTitle("Choose an option for photo \""+albums.get(index).getPhotoList().get(position).getCaption()+"\"");
+
+
+        optionsAlert.setNeutralButton("Open", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //save();
+                openPhoto(position);
+            }
+        });
+
+        optionsAlert.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                albums.get(index).getPhotoList().remove(position);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        optionsAlert.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //promptRename(position);
+            }
+        });
+
+
+        optionsAlert.show();
+    }
+
+    public void openPhoto( int position){
+        Intent intent = new Intent(PhotosScene.this, DisplayPhoto.class);
+        intent.putExtra("indexp", String.valueOf(position));
+        startActivity(intent);
+    }
+
+
 
 
     public void printAlbums(ArrayList<Album> albums){
@@ -118,7 +172,12 @@ public class PhotosScene extends AppCompatActivity {
 
             try {
                 imageUri = data.getData();
-                caption = data.getDataString();
+
+                File file = new File(imageUri.getPath());
+
+                caption = file.getName();
+
+
                 //gridView.getAdapter().getView(viewNum).setImageURI(imageUri);
                 //imageView.setImageURI(imageUri);
                 InputStream imageStream = getContentResolver().openInputStream(imageUri);
@@ -128,6 +187,7 @@ public class PhotosScene extends AppCompatActivity {
                 e.printStackTrace();
             }
             Photo p = new Photo(imageBitmap,caption);
+            System.out.println("CAPTION :::::::::::::::: " + caption);
             albums.get(index).getPhotoList().add(p);
             System.out.println("checkkkkkkkkkkkkkkkkk :::::::::: " + albums.get(index).getPhotoList().get(0));
             adapter.notifyDataSetChanged();
@@ -162,5 +222,9 @@ public class PhotosScene extends AppCompatActivity {
 
     }
 
+    public static Photo getDataForDisplay(int position) {
+        Photo p = albums.get(index).getPhotoList().get(position);
+        return p;
+    }
 
 }

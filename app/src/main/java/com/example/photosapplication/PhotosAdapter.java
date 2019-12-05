@@ -45,7 +45,11 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
 
         }
         TextView tv = (TextView) convertView.findViewById(R.id.caption);
-        tv.setText(photoList.get(position).getCaption().substring(0,15));
+        if(photoList.get(position).getCaption().length()<=15){
+            tv.setText(photoList.get(position).getCaption());
+        }else{
+            tv.setText(photoList.get(position).getCaption().substring(0,15));
+        }
         ImageView iv =  (ImageView) convertView.findViewById(R.id.image);
         iv.setImageBitmap(photoList.get(position).getBitmap());
 

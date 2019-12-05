@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name = ".PhotosScene"></activity>
+        <activity android:name = ".DisplayPhoto"></activity>
     </application>
 
 </manifest>
