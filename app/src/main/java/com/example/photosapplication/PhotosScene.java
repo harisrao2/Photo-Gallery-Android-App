@@ -227,4 +227,8 @@ public class PhotosScene extends AppCompatActivity {
         return p;
     }
 
+    public static Album getData(){
+        return albums.get(index);
+    }
+
 }

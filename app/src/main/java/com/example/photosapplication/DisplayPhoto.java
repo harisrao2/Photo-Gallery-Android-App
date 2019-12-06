@@ -12,11 +12,19 @@ public class DisplayPhoto extends AppCompatActivity {
 
     FloatingActionButton bd_back;
 
+    FloatingActionButton b_next;
+
+    FloatingActionButton b_prev;
+
     ImageView iv_displayPhoto;
+
+    Album album ;
 
     Photo photo;
 
     int index;
+
+    int slideShowIndex;
 
 
     @Override
@@ -24,11 +32,15 @@ public class DisplayPhoto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.display_photo);
 
-       index  = Integer.parseInt(getIntent().getStringExtra("indexp"));
+        index  = Integer.parseInt(getIntent().getStringExtra("indexp"));
+        slideShowIndex = index;
 
         bd_back = (FloatingActionButton) findViewById(R.id.bd_back);
+        b_next = findViewById(R.id.b_next);
+        b_prev = findViewById(R.id.b_prev);
 
-        photo = PhotosScene.getDataForDisplay(index);
+        //photo = PhotosScene.getDataForDisplay(index);
+        album = PhotosScene.getData();
 
         iv_displayPhoto = findViewById(R.id.iv_displayPhoto);
 
@@ -39,7 +51,31 @@ public class DisplayPhoto extends AppCompatActivity {
             }
         });
 
-        iv_displayPhoto.setImageBitmap(photo.getBitmap());
+        b_next.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                if(slideShowIndex == album.getPhotoList().size()-1){
+
+                }else{
+                    slideShowIndex = slideShowIndex + 1;
+                }
+                iv_displayPhoto.setImageBitmap(album.getPhotoList().get(slideShowIndex).getBitmap());
+            }
+        });
+
+        b_prev.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                if(slideShowIndex == 0){
+
+                }else{
+                    slideShowIndex = slideShowIndex - 1;
+                }
+                iv_displayPhoto.setImageBitmap(album.getPhotoList().get(slideShowIndex).getBitmap());
+            }
+        });
+
+        iv_displayPhoto.setImageBitmap(album.getPhotoList().get(index).getBitmap());
 
     }
 
