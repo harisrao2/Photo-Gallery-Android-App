@@ -11,19 +11,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class DisplayPhoto extends AppCompatActivity {
 
     FloatingActionButton bd_back;
-
     FloatingActionButton b_next;
-
     FloatingActionButton b_prev;
 
     ImageView iv_displayPhoto;
-
     Album album ;
-
     Photo photo;
-
     int index;
-
     int slideShowIndex;
 
 

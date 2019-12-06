@@ -31,17 +31,11 @@ import java.util.ArrayList;
 public class PhotosScene extends AppCompatActivity {
 
     FloatingActionButton b_back;
-
-
     GridView gridView;
-
-    //ImageView imageView;
-
     Bitmap imageBitmap;
-
     String caption;
-
     FloatingActionButton b_addPhoto;
+    FloatingActionButton b_search;
 
 
     static ArrayList<Album> albums;
@@ -71,8 +65,9 @@ public class PhotosScene extends AppCompatActivity {
         //albums.get(index).setPhotoList(photoList);
         //load();
         System.out.println("ALBUMNAMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE :::" + albums.get(index).getAlbumName());
-        b_back = findViewById(R.id.b_back);
+        b_back = findViewById(R.id.bs_back);
         b_addPhoto = findViewById(R.id.b_addphoto);
+        b_search = findViewById(R.id.b_search);
 
         gridView = (GridView) findViewById(R.id.photos_grid);
         adapter = new PhotosAdapter(this, albums.get(index).getPhotoList());
@@ -85,6 +80,13 @@ public class PhotosScene extends AppCompatActivity {
             public void onClick(View view){
                 save();
                 finish();
+            }
+        });
+
+        b_search.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                search();
             }
         });
 
@@ -110,6 +112,10 @@ public class PhotosScene extends AppCompatActivity {
 
 
     }
+    public void search(){
+        Intent intent = new Intent(PhotosScene.this, SearchScene.class);
+        startActivity(intent);
+    }
 
     public void showOptions(final int position){
 
@@ -117,7 +123,7 @@ public class PhotosScene extends AppCompatActivity {
         AlertDialog.Builder photoOptions = new AlertDialog.Builder(this);
         photoOptions.setTitle("Choose an option for photo \""+albums.get(index).getPhotoList().get(position));
         photoOptions.setItems(new CharSequence[]
-                        {"Open", "Move", "Rename", "Delete"},
+                        {"Open","Add Tag","Remove Tag", "Move", "Rename", "Delete"},
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // The 'which' argument contains the index position
@@ -126,13 +132,19 @@ public class PhotosScene extends AppCompatActivity {
                             save();
                             openPhoto(position);
                         }
-                        else if( which == 1) {  // if Move
+                        else if(which == 1){ // if Add tag
+                            promptAddTag(position);
+                        }
+                        else if(which == 2){ // if Remove Tag
+
+                        }
+                        else if( which == 3) {  // if Move
                             promptMove(position);
                         }
-                        else if(which == 2){ // if Rename
+                        else if(which == 4){ // if Rename
                             promptRename(position);
                         }
-                        else if (which ==3){ // if Delete
+                        else if (which ==5){ // if Delete
                             albums.get(index).getPhotoList().remove(position);
                             adapter.notifyDataSetChanged();
                         }
@@ -140,6 +152,79 @@ public class PhotosScene extends AppCompatActivity {
                     }
                 });
         photoOptions.create().show();
+    }
+
+    public void promptAddTag(final int position){
+        AlertDialog.Builder chooseTag = new AlertDialog.Builder(this);
+
+        chooseTag.setTitle("Choose a Tag Type");
+
+       // chooseTag.setMessage("Choose a Tag Type");
+        chooseTag.setPositiveButton("Location", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                promptLocationTag(position);
+            }
+        });
+        chooseTag.setNegativeButton("Person", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                promptPersonTag(position);
+            }
+        });
+
+
+        chooseTag.show();
+
+    }
+    public void promptPersonTag(final int position){
+        AlertDialog.Builder location = new AlertDialog.Builder(this);
+        location.setTitle("Enter a Location");
+
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        location.setView(input);
+
+        location.setPositiveButton("Add Tag", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //albums.get(index).getPhotoList().get(position).setPeople(albums.get(index));
+            }
+        });
+
+        location.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+    }
+
+    public void promptLocationTag(final int position){
+        AlertDialog.Builder location = new AlertDialog.Builder(this);
+        location.setTitle("Enter a Location");
+
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        location.setView(input);
+
+        location.setPositiveButton("Add Tag", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                albums.get(index).getPhotoList().get(position).setLocation(input.getText().toString());
+            }
+        });
+
+        location.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
     }
 
     public void promptMove(final int position){
