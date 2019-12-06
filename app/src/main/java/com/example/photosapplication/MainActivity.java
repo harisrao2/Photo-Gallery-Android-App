@@ -173,31 +173,31 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder rename = new AlertDialog.Builder(this);
         rename.setTitle("Rename album \""+albums.get(position).getAlbumName()+"\" to :");
 
-        final EditText input = new EditText(this);
+    final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         rename.setView(input);
 
         rename.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                adapter.remove(albums.get(position).getAlbumName());
-                albums.get(position).setAlbumName(input.getText().toString());
-                adapter.insert(albums.get(position).getAlbumName(),position);
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            adapter.remove(albums.get(position).getAlbumName());
+            albums.get(position).setAlbumName(input.getText().toString());
+            adapter.insert(albums.get(position).getAlbumName(),position);
 
-            }
-        });
+        }
+    });
 
 
         rename.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            dialog.cancel();
+        }
+    });
         rename.show();
 
-        //return input.getText().toString();
-    }
+    //return input.getText().toString();
+}
 
     public void createNewAlbum(){
         //making a new Alert for Create new Album

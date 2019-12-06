@@ -8,9 +8,11 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -110,35 +112,61 @@ public class PhotosScene extends AppCompatActivity {
     }
 
     public void showOptions(final int position){
-        AlertDialog.Builder optionsAlert = new AlertDialog.Builder(this);
-        optionsAlert.setTitle("Choose an option for photo \""+albums.get(index).getPhotoList().get(position).getCaption()+"\"");
 
 
-        optionsAlert.setNeutralButton("Open", new DialogInterface.OnClickListener() {
-            @Override
+        AlertDialog.Builder photoOptions = new AlertDialog.Builder(this);
+        photoOptions.setTitle("Choose an option for photo \""+albums.get(index).getPhotoList().get(position));
+        photoOptions.setItems(new CharSequence[]
+                        {"Open", "Move", "Rename", "Delete"},
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // The 'which' argument contains the index position
+                        // of the selected item
+                        if(which==0) { // if Open
+                            save();
+                            openPhoto(position);
+                        }
+                        else if( which == 1) {  // if Move
+                            promptMove(position);
+                        }
+                        else if(which == 2){ // if Rename
+                            promptRename(position);
+                        }
+                        else if (which ==3){ // if Delete
+                            albums.get(index).getPhotoList().remove(position);
+                            adapter.notifyDataSetChanged();
+                        }
+
+                    }
+                });
+        photoOptions.create().show();
+    }
+
+    public void promptMove(final int position){
+
+        CharSequence [] listOfAlbums = new CharSequence[albums.size()];
+
+        for (int i = 0 ;i<albums.size();i++){
+            listOfAlbums[i] = albums.get(i).getAlbumName();
+            System.out.println("CHARF SQEUENCEE :::::::::::::::::::::::::::::::"+listOfAlbums[i]);
+
+        }
+
+
+        AlertDialog.Builder moveOption = new AlertDialog.Builder(this);
+        moveOption.setTitle("Select an Album to move this photo to");
+        moveOption.setItems(listOfAlbums, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                //save();
-                openPhoto(position);
-            }
-        });
-
-        optionsAlert.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+                // The 'which' argument contains the index position
+                // of the selected item
+                albums.get(which).getPhotoList().add(albums.get(index).getPhotoList().get(position));
                 albums.get(index).getPhotoList().remove(position);
                 adapter.notifyDataSetChanged();
+
             }
         });
+        moveOption.create().show();
 
-        optionsAlert.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //promptRename(position);
-            }
-        });
-
-
-        optionsAlert.show();
     }
 
     public void openPhoto( int position){
@@ -195,6 +223,37 @@ public class PhotosScene extends AppCompatActivity {
 
         }
 
+    }
+
+    public void promptRename(final int position){
+        AlertDialog.Builder rename = new AlertDialog.Builder(this);
+        rename.setTitle("Rename photo \""+albums.get(index).getPhotoList().get(position).getCaption()+"\" to :");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        rename.setView(input);
+
+        rename.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                albums.get(index).getPhotoList().get(position).setCaption(input.getText().toString());
+                adapter.notifyDataSetChanged();
+
+            }
+        });
+
+
+        rename.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        rename.show();
+
+        //return input.getText().toString();
     }
 
     public void save(){
