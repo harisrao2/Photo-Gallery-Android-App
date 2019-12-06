@@ -73,6 +73,41 @@ public class SearchScene extends AppCompatActivity {
 
     }
 
+    public void searchWithPeople(){
+        String input = tf_tagInput.getText().toString();
+        tempalbum = new Album("search results", new ArrayList<Photo>() );
+
+        if(input.matches("")){
+            AlertDialog.Builder noinput = new AlertDialog.Builder(this);
+            noinput.setMessage("Enter a tag in the text field and then hit the button");
+
+            noinput.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            noinput.show();
+        }else{
+
+            for (int i = 0; i< album.getPhotoList().size();i++){
+                for (int j = 0 ; j<album.getPhotoList().get(i).getPeople().size();j++){
+                    if(album.getPhotoList().get(i).getPeople().get(j).contains(input)){
+                        tempalbum.getPhotoList().add(album.getPhotoList().get(i));
+                        System.out.println("ADDING ::::::::::::::::::::::::::::::" +album.getPhotoList().get(i).getCaption() );
+                    }else{
+                        System.out.println("CANT GET IN ::::::::::::::::");
+                    }
+                }
+            }
+            adapterTemp = new PhotosAdapter(this, tempalbum.getPhotoList());
+            gridview.setAdapter(adapterTemp);
+            adapter.notifyDataSetChanged();
+
+        }
+    }
+
     public void searchWithLocation(){
         String input = tf_tagInput.getText().toString();
         tempalbum = new Album("search results", new ArrayList<Photo>() );
