@@ -136,7 +136,7 @@ public class PhotosScene extends AppCompatActivity {
                             promptAddTag(position);
                         }
                         else if(which == 2){ // if Remove Tag
-
+                            promptRemoveTag(position);
                         }
                         else if( which == 3) {  // if Move
                             promptMove(position);
@@ -154,10 +154,105 @@ public class PhotosScene extends AppCompatActivity {
         photoOptions.create().show();
     }
 
+    public void promptRemoveTag(final int position){
+        AlertDialog.Builder chooseTag = new AlertDialog.Builder(this);
+
+        chooseTag.setTitle("Choose a Tag Type to Remove");
+
+        // chooseTag.setMessage("Choose a Tag Type");
+        chooseTag.setPositiveButton("Location", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                promptRemoveLocationTag(position);
+            }
+        });
+        chooseTag.setNegativeButton("Person", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                promptRemovePersonTag(position);
+            }
+        });
+
+
+        chooseTag.show();
+    }
+
+    public void promptRemoveLocationTag(final int position){
+        if(albums.get(index).getPhotoList().get(position).getLocation()==""){
+            AlertDialog.Builder noloc = new AlertDialog.Builder(this);
+            noloc.setMessage("There is no location tagged in this photo");
+            noloc.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+
+                }
+            });
+            noloc.show();
+
+        }else {
+            AlertDialog.Builder removeloc = new AlertDialog.Builder(this);
+            removeloc.setTitle("Do you want to Remove the \"" + albums.get(index).getPhotoList().get(position).getLocation() + "\" location tag");
+
+            removeloc.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    albums.get(index).getPhotoList().get(position).setLocation("");
+
+                }
+            });
+
+            removeloc.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            removeloc.show();
+        }
+    }
+
+    public void promptRemovePersonTag (final int position){
+        if(albums.get(index).getPhotoList().get(position).getPeople().size()>0){
+
+            CharSequence [] listOfTags = new CharSequence[albums.get(index).getPhotoList().get(position).getPeople().size()];
+
+            for (int i = 0 ; i<albums.get(index).getPhotoList().get(position).getPeople().size(); i++ ){
+                listOfTags[i] = albums.get(index).getPhotoList().get(position).getPeople().get(i);
+            }
+
+            AlertDialog.Builder removepeep = new AlertDialog.Builder(this);
+            removepeep.setTitle("Select a tag to remove");
+            removepeep.setItems(listOfTags, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // The 'which' argument contains the index position
+                    // of the selected item
+                    albums.get(index).getPhotoList().get(position).getPeople().remove(which);
+                    adapter.notifyDataSetChanged();
+
+                }
+            });
+            removepeep.create().show();
+
+
+        }else{
+            AlertDialog.Builder nopeep = new AlertDialog.Builder(this);
+            nopeep.setMessage("There are no people tagged in this photo");
+            nopeep.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+
+                }
+            });
+            nopeep.show();
+        }
+    }
+
     public void promptAddTag(final int position){
         AlertDialog.Builder chooseTag = new AlertDialog.Builder(this);
 
-        chooseTag.setTitle("Choose a Tag Type");
+        chooseTag.setTitle("Choose a Tag Type to Add");
 
        // chooseTag.setMessage("Choose a Tag Type");
         chooseTag.setPositiveButton("Location", new DialogInterface.OnClickListener() {
@@ -178,52 +273,69 @@ public class PhotosScene extends AppCompatActivity {
 
     }
     public void promptPersonTag(final int position){
-        AlertDialog.Builder location = new AlertDialog.Builder(this);
-        location.setTitle("Enter a Location");
+        AlertDialog.Builder people = new AlertDialog.Builder(this);
+        people.setTitle("Enter a Location");
 
 
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        location.setView(input);
+        people.setView(input);
 
-        location.setPositiveButton("Add Tag", new DialogInterface.OnClickListener() {
+        people.setPositiveButton("Add Tag", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //albums.get(index).getPhotoList().get(position).setPeople(albums.get(index));
+                albums.get(index).getPhotoList().get(position).addPerson(input.getText().toString());
+
             }
         });
 
-        location.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+       people.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
+        people.show();
 
     }
 
     public void promptLocationTag(final int position){
-        AlertDialog.Builder location = new AlertDialog.Builder(this);
-        location.setTitle("Enter a Location");
+        if(albums.get(index).getPhotoList().get(position).getLocation()=="") {
+            AlertDialog.Builder location = new AlertDialog.Builder(this);
+            location.setTitle("Enter a Location");
 
 
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        location.setView(input);
+            final EditText input = new EditText(this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            location.setView(input);
 
-        location.setPositiveButton("Add Tag", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                albums.get(index).getPhotoList().get(position).setLocation(input.getText().toString());
-            }
-        });
+            location.setPositiveButton("Add Tag", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    albums.get(index).getPhotoList().get(position).setLocation(input.getText().toString());
+                }
+            });
 
-        location.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+            location.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            location.show();
+        }else{
+            AlertDialog.Builder locexists = new AlertDialog.Builder(this);
+            locexists.setMessage("Remove the Existing location lag from the image to add a new location tag");
+            locexists.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+
+                }
+            });
+            locexists.show();
+        }
 
     }
 

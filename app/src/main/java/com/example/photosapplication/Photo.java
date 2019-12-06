@@ -40,6 +40,9 @@ public class Photo {
         return this.people;
     }
 
+    public void addPerson(String person){
+        this.people.add(person);
+    }
 
     public void setCaption(String caption){
         this.caption = caption;
