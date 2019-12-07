@@ -274,7 +274,7 @@ public class PhotosScene extends AppCompatActivity {
     }
     public void promptPersonTag(final int position){
         AlertDialog.Builder people = new AlertDialog.Builder(this);
-        people.setTitle("Enter a Location");
+        people.setTitle("Enter the name of the Person");
 
 
         final EditText input = new EditText(this);
@@ -284,7 +284,9 @@ public class PhotosScene extends AppCompatActivity {
         people.setPositiveButton("Add Tag", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                albums.get(index).getPhotoList().get(position).addPerson(input.getText().toString());
+                ArrayList<String> temp = albums.get(index).getPhotoList().get(position).getPeople();
+                temp.add(input.getText().toString());
+                albums.get(index).getPhotoList().get(position).setPeople(temp);
 
             }
         });
