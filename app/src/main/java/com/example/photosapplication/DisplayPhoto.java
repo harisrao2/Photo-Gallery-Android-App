@@ -79,15 +79,16 @@ public class DisplayPhoto extends AppCompatActivity {
         iv_displayPhoto.setImageBitmap(album.getPhotoList().get(index).getBitmap());
 
         locationHolder.setText(album.getPhotoList().get(index).getLocation());
-        peopleHolder.setText(displayPeopleTag());
+        displayPeopleTag();
     }
 
-    public String displayPeopleTag(){
+    public void displayPeopleTag(){
         String people = "";
         for (int i = 0;i< album.getPhotoList().get(index).getPeople().size();i++){
-            people.concat(album.getPhotoList().get(index).getPeople().get(i) + ", ");
+            people = people + album.getPhotoList().get(index).getPeople().get(i) + ", ";
         }
-        return people;
+        System.out.print("ALL PEOPLEEEEEEEEEEEEEEEEEEEEE ::::::::::::::::::::::::::::::  " + people);
+        peopleHolder.setText(people);
     }
 
 }
