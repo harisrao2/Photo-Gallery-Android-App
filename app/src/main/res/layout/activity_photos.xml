@@ -12,7 +12,7 @@
 
         <GridView
             android:id="@+id/photos_grid"
-            android:layout_width="match_parent"
+            android:layout_width="380dp"
             android:layout_height="match_parent"
             android:columnWidth="90dp"
             android:gravity="center"

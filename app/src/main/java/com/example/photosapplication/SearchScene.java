@@ -1,9 +1,7 @@
 package com.example.photosapplication;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +25,8 @@ public class SearchScene extends AppCompatActivity {
     GridView gridview;
     TextInputEditText tf_tagInput;
     PhotosAdapter adapter;
+    EditText searchDisplay;
+
 
     PhotosAdapter adapterTemp;
 
@@ -49,6 +49,7 @@ public class SearchScene extends AppCompatActivity {
         b_people = findViewById(R.id.b_people);
         gridview = findViewById(R.id.gv_searchResults);
         tf_tagInput = findViewById(R.id.tf_tagInput);
+        searchDisplay = findViewById(R.id.searchDisplay);
         //tv_banner = findViewById(R.id.tv_banner);
 
        // tv_banner.setText("Showing All photos");
@@ -95,41 +96,8 @@ public class SearchScene extends AppCompatActivity {
     }
 
 
-    public void openPhoto( int position){
-        Intent intent = new Intent(SearchScene.this, DisplayPhoto.class);
-        intent.putExtra("indexp", String.valueOf(position));
-        startActivity(intent);
-    }
-    public void promptRename(final int position){
-        AlertDialog.Builder rename = new AlertDialog.Builder(this);
-        rename.setTitle("Rename photo \""+album.getPhotoList().get(position).getCaption()+"\" to :");
-
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        rename.setView(input);
-
-        rename.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
 
 
-                album.getPhotoList().get(position).setCaption(input.getText().toString());
-                adapter.notifyDataSetChanged();
-
-            }
-        });
-
-
-        rename.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        rename.show();
-
-        //return input.getText().toString();
-    }
 
     public void searchWithPeople(){
         System.out.println("Search with Both");
@@ -163,6 +131,7 @@ public class SearchScene extends AppCompatActivity {
             adapterTemp = new PhotosAdapter(this, tempalbum.getPhotoList());
             gridview.setAdapter(adapterTemp);
             adapter.notifyDataSetChanged();
+            searchDisplay.setText("Showing results for \"" + input + "\"");
             //tv_banner.setText("Showing photos with the location/person tag of \"" + input + "\"");
         }
     }
@@ -205,6 +174,7 @@ public class SearchScene extends AppCompatActivity {
             adapterTemp = new PhotosAdapter(this, tempalbum.getPhotoList());
             gridview.setAdapter(adapterTemp);
             adapter.notifyDataSetChanged();
+            searchDisplay.setText("Showing results for \"" + input + "\"");
             //tv_banner.setText("Showing photos with the person tag of \"" + input + "\"");
 
         }
@@ -237,6 +207,7 @@ public class SearchScene extends AppCompatActivity {
             adapterTemp = new PhotosAdapter(this, tempalbum.getPhotoList());
             gridview.setAdapter(adapterTemp);
             adapter.notifyDataSetChanged();
+            searchDisplay.setText("Showing results for \"" + input + "\"");
            // tv_banner.setText("Showing photos with the location tag of \"" + input + "\"");
         }
 
