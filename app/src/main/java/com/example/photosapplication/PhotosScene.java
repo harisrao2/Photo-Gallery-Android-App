@@ -121,7 +121,7 @@ public class PhotosScene extends AppCompatActivity {
 
 
         AlertDialog.Builder photoOptions = new AlertDialog.Builder(this);
-        photoOptions.setTitle("Choose an option for photo \""+albums.get(index).getPhotoList().get(position));
+        photoOptions.setTitle("Choose an option for photo \""+albums.get(index).getPhotoList().get(position).getCaption());
         photoOptions.setItems(new CharSequence[]
                         {"Open","Add Tag","Remove Tag", "Move", "Rename", "Delete"},
                 new DialogInterface.OnClickListener() {

@@ -2,6 +2,7 @@ package com.example.photosapplication;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,9 @@ public class DisplayPhoto extends AppCompatActivity {
     FloatingActionButton bd_back;
     FloatingActionButton b_next;
     FloatingActionButton b_prev;
+
+    EditText peopleHolder;
+    EditText locationHolder;
 
     ImageView iv_displayPhoto;
     Album album ;
@@ -32,6 +36,9 @@ public class DisplayPhoto extends AppCompatActivity {
         bd_back = (FloatingActionButton) findViewById(R.id.bd_back);
         b_next = findViewById(R.id.b_next);
         b_prev = findViewById(R.id.b_prev);
+        peopleHolder = findViewById(R.id.peopleHolder);
+        locationHolder = findViewById(R.id.locationHolder);
+
 
         //photo = PhotosScene.getDataForDisplay(index);
         album = PhotosScene.getData();
@@ -71,6 +78,16 @@ public class DisplayPhoto extends AppCompatActivity {
 
         iv_displayPhoto.setImageBitmap(album.getPhotoList().get(index).getBitmap());
 
+        locationHolder.setText(album.getPhotoList().get(index).getLocation());
+        peopleHolder.setText(displayPeopleTag());
+    }
+
+    public String displayPeopleTag(){
+        String people = "";
+        for (int i = 0;i< album.getPhotoList().get(index).getPeople().size();i++){
+            people.concat(album.getPhotoList().get(index).getPeople().get(i) + ", ");
+        }
+        return people;
     }
 
 }
