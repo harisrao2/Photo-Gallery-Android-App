@@ -38,7 +38,8 @@ public class DisplayPhoto extends AppCompatActivity {
         b_prev = findViewById(R.id.b_prev);
         peopleHolder = findViewById(R.id.peopleHolder);
         locationHolder = findViewById(R.id.locationHolder);
-
+        peopleHolder.setKeyListener(null);
+        locationHolder.setKeyListener(null);
 
         //photo = PhotosScene.getDataForDisplay(index);
         album = PhotosScene.getData();

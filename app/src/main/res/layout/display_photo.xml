@@ -13,13 +13,55 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton android:layout_height="wrap_content" android:layout_width="wrap_content" app:srcCompat="@android:drawable/ic_media_next" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent" android:clickable="true" android:id="@+id/b_next" app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.868"/>
 
-    <EditText android:layout_height="42dp" android:layout_width="88dp" app:layout_constraintStart_toStartOf="parent" android:id="@+id/peopleText" app:layout_constraintTop_toTopOf="parent" android:text="People : " android:inputType="textPersonName" android:ems="10" android:layout_marginTop="56dp"/>
+        <EditText
+            android:id="@+id/peopleText"
+            android:layout_width="88dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="56dp"
+            android:editable="false"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="People : "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText android:layout_height="42dp" android:layout_width="88dp" app:layout_constraintStart_toStartOf="parent" android:id="@+id/locationText" app:layout_constraintTop_toTopOf="parent" android:text="Location :" android:inputType="textPersonName" android:ems="10" android:layout_marginTop="16dp"/>
+        <EditText
+            android:id="@+id/locationText"
+            android:layout_width="88dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="16dp"
+            android:duplicateParentState="false"
+            android:editable="false"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Location :"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/locationHolder" app:layout_constraintTop_toTopOf="parent" android:inputType="textPersonName" android:ems="10" android:layout_marginTop="16dp" app:layout_constraintStart_toEndOf="@+id/locationText" android:layout_marginStart="10dp"/>
+        <EditText
+            android:id="@+id/locationHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="16dp"
+            android:duplicateParentState="false"
+            android:editable="false"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toEndOf="@+id/locationText"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText android:layout_height="43dp" android:layout_width="306dp" android:id="@+id/peopleHolder" app:layout_constraintTop_toTopOf="parent" android:inputType="textPersonName" android:ems="10" android:layout_marginTop="56dp" app:layout_constraintStart_toEndOf="@+id/peopleText" android:layout_marginStart="10dp"/>
+        <EditText
+            android:id="@+id/peopleHolder"
+            android:layout_width="306dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="56dp"
+            android:editable="false"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toEndOf="@+id/peopleText"
+            app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

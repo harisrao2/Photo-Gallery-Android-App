@@ -140,6 +140,8 @@ public class SearchScene extends AppCompatActivity {
         String input = tf_tagInput.getText().toString();
         tempalbum = new Album("search results", new ArrayList<Photo>() );
 
+        String name = "";
+
         if(input.matches("")){
             AlertDialog.Builder noinput = new AlertDialog.Builder(this);
             noinput.setMessage("Enter a tag in the text field and then hit the button");
@@ -154,21 +156,38 @@ public class SearchScene extends AppCompatActivity {
             noinput.show();
         }else{
 
+            //boolean brk = false;
+            //index = -1;
+
             for (int i = 0; i< album.getPhotoList().size();i++){
                 for (int j = 0 ; j<album.getPhotoList().get(i).getPeople().size();j++){
                     if(album.getPhotoList().get(i).getPeople().get(j).contains(input)){
                         tempalbum.getPhotoList().add(album.getPhotoList().get(i));
+                        System.out.println("Adding to Temp List1 :" + album.getPhotoList().get(i).getCaption());
+                        name = album.getPhotoList().get(i).getCaption();
+                        //index = i;
+                        //brk = true;
                         break;
                         //System.out.println("ADDING ::::::::::::::::::::::::::::::" +album.getPhotoList().get(i).getCaption() );
                     }else{
                         //System.out.println("CANT GET IN ::::::::::::::::");
                     }
+
                 }
             }
 
+
             for (int i = 0; i < album.getPhotoList().size(); i++) {
                 if (album.getPhotoList().get(i).getLocation().contains(input)) {
-                    tempalbum.getPhotoList().add(album.getPhotoList().get(i));
+                        for (int j = 0;j<tempalbum.getPhotoList().size();j++) {
+                            if (tempalbum.getPhotoList().get(j).getCaption() != name) {
+                                tempalbum.getPhotoList().add(album.getPhotoList().get(i));
+                                System.out.println("Adding to Temp List2 :" + album.getPhotoList().get(i).getCaption());
+                                break;
+                            }
+
+
+                        }
                 }
             }
             adapterTemp = new PhotosAdapter(this, tempalbum.getPhotoList());
