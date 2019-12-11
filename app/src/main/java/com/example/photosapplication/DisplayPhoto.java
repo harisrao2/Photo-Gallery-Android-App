@@ -18,6 +18,9 @@ public class DisplayPhoto extends AppCompatActivity {
     EditText peopleHolder;
     EditText locationHolder;
 
+    EditText peopleText;
+    EditText locationText;
+
     ImageView iv_displayPhoto;
     Album album ;
     Photo photo;
@@ -40,6 +43,10 @@ public class DisplayPhoto extends AppCompatActivity {
         locationHolder = findViewById(R.id.locationHolder);
         peopleHolder.setKeyListener(null);
         locationHolder.setKeyListener(null);
+        peopleText = findViewById(R.id.peopleText);
+        peopleText.setKeyListener(null);
+        locationText = findViewById(R.id.locationText);
+        locationText.setKeyListener(null);
 
         //photo = PhotosScene.getDataForDisplay(index);
         album = PhotosScene.getData();

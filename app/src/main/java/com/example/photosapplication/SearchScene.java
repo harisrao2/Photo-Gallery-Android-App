@@ -50,6 +50,7 @@ public class SearchScene extends AppCompatActivity {
         gridview = findViewById(R.id.gv_searchResults);
         tf_tagInput = findViewById(R.id.tf_tagInput);
         searchDisplay = findViewById(R.id.searchDisplay);
+        searchDisplay.setKeyListener(null);
         //tv_banner = findViewById(R.id.tv_banner);
 
        // tv_banner.setText("Showing All photos");

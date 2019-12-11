@@ -249,27 +249,41 @@ public class PhotosScene extends AppCompatActivity {
         }
     }
 
-    public void promptAddTag(final int position){
-        AlertDialog.Builder chooseTag = new AlertDialog.Builder(this);
+    public void promptAddTag(final int position) {
 
-        chooseTag.setTitle("Choose a Tag Type to Add");
 
-       // chooseTag.setMessage("Choose a Tag Type");
-        chooseTag.setPositiveButton("Location", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                promptLocationTag(position);
+            AlertDialog.Builder chooseTag = new AlertDialog.Builder(this);
+
+            chooseTag.setTitle("Choose a Tag Type to Add");
+
+            // chooseTag.setMessage("Choose a Tag Type");
+            chooseTag.setPositiveButton("Location", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    promptLocationTag(position);
+                }
+            });
+            chooseTag.setNegativeButton("Person", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    promptPersonTag(position);
+                }
+            });
+
+
+            chooseTag.show();
+
+
+    }
+
+    public boolean tagExists(String name, Photo p){
+
+        for(int i = 0;i<p.getPeople().size();i++) {
+            if (name.equals(p.getPeople().get(i))){
+                return true;
             }
-        });
-        chooseTag.setNegativeButton("Person", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                promptPersonTag(position);
-            }
-        });
-
-
-        chooseTag.show();
+        }
+        return false;
 
     }
     public void promptPersonTag(final int position){
@@ -281,24 +295,43 @@ public class PhotosScene extends AppCompatActivity {
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         people.setView(input);
 
-        people.setPositiveButton("Add Tag", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ArrayList<String> temp = albums.get(index).getPhotoList().get(position).getPeople();
-                temp.add(input.getText().toString());
-                albums.get(index).getPhotoList().get(position).setPeople(temp);
 
-            }
-        });
 
-       people.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        people.show();
+            people.setPositiveButton("Add Tag", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    addTagPressed(input.getText().toString(), position);
+                }
+            });
 
+            people.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            people.show();
+
+
+    }
+
+    public void addTagPressed(String input, final int position){
+        if (tagExists(input, albums.get(index).getPhotoList().get(position)) == true) {
+            AlertDialog.Builder nopeep = new AlertDialog.Builder(this);
+            nopeep.setMessage("This tag already exists");
+            nopeep.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+
+                }
+            });
+            nopeep.show();
+        }else{
+            ArrayList<String> temp = albums.get(index).getPhotoList().get(position).getPeople();
+            temp.add(input);
+            albums.get(index).getPhotoList().get(position).setPeople(temp);
+        }
     }
 
     public void promptLocationTag(final int position){
