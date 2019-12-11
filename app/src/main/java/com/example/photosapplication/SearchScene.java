@@ -164,11 +164,8 @@ public class SearchScene extends AppCompatActivity {
                     if(album.getPhotoList().get(i).getPeople().get(j).contains(input)){
                         tempalbum.getPhotoList().add(album.getPhotoList().get(i));
                         System.out.println("Adding to Temp List1 :" + album.getPhotoList().get(i).getCaption());
-                        name = album.getPhotoList().get(i).getCaption();
-                        //index = i;
-                        //brk = true;
                         break;
-                        //System.out.println("ADDING ::::::::::::::::::::::::::::::" +album.getPhotoList().get(i).getCaption() );
+
                     }else{
                         //System.out.println("CANT GET IN ::::::::::::::::");
                     }
@@ -178,16 +175,11 @@ public class SearchScene extends AppCompatActivity {
 
 
             for (int i = 0; i < album.getPhotoList().size(); i++) {
-                if (album.getPhotoList().get(i).getLocation().contains(input)) {
-                        for (int j = 0;j<tempalbum.getPhotoList().size();j++) {
-                            if (tempalbum.getPhotoList().get(j).getCaption() != name) {
-                                tempalbum.getPhotoList().add(album.getPhotoList().get(i));
-                                System.out.println("Adding to Temp List2 :" + album.getPhotoList().get(i).getCaption());
-                                break;
-                            }
 
-
-                        }
+                if (album.getPhotoList().get(i).getLocation().contains(input) && inArray (album.getPhotoList().get(i),tempalbum)==false) {
+                    tempalbum.getPhotoList().add(album.getPhotoList().get(i));
+                    System.out.println("Adding to Temp List2 :" + album.getPhotoList().get(i).getCaption());
+                    }
                 }
             }
             adapterTemp = new PhotosAdapter(this, tempalbum.getPhotoList());
@@ -196,7 +188,18 @@ public class SearchScene extends AppCompatActivity {
             searchDisplay.setText("Showing results for \"" + input + "\"");
             //tv_banner.setText("Showing photos with the person tag of \"" + input + "\"");
 
+    }
+
+
+    public boolean inArray(Photo p,Album tempalbum){
+
+        for (int i = 0;i<tempalbum.getPhotoList().size();i++){
+            if(tempalbum.getPhotoList().get(i) == p){
+                return true;
+            }
         }
+
+        return false;
     }
 
     public void searchWithLocation(){

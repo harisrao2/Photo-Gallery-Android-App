@@ -424,6 +424,8 @@ public class PhotosScene extends AppCompatActivity {
 
     }
 
+
+
     public void promptRename(final int position){
         AlertDialog.Builder rename = new AlertDialog.Builder(this);
         rename.setTitle("Rename photo \""+albums.get(index).getPhotoList().get(position).getCaption()+"\" to :");
@@ -435,10 +437,20 @@ public class PhotosScene extends AppCompatActivity {
         rename.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (input.getText().toString().matches("")) {
+                    promptNoInput();
+
+                }else{
+                    if(nameExist(albums, input.getText().toString())==true){
+                        promptDuplicateName();
+                    }else{
+                        albums.get(index).getPhotoList().get(position).setCaption(input.getText().toString());
+                        adapter.notifyDataSetChanged();
+                    }
+
+                }
 
 
-                albums.get(index).getPhotoList().get(position).setCaption(input.getText().toString());
-                adapter.notifyDataSetChanged();
 
             }
         });
@@ -454,6 +466,42 @@ public class PhotosScene extends AppCompatActivity {
 
         //return input.getText().toString();
     }
+
+    public void promptDuplicateName(){
+        AlertDialog.Builder noinput = new AlertDialog.Builder(this);
+        noinput.setMessage("That image Caption already exists");
+
+        noinput.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        noinput.show();
+    }
+    public boolean nameExist(ArrayList<Album>albums, String name){
+        for(int i = 0;i<albums.size();i++){
+            if(albums.get(index).getPhotoList().get(i).getCaption().equals(name)){
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public void promptNoInput(){
+        AlertDialog.Builder noinput = new AlertDialog.Builder(this);
+        noinput.setMessage("Caption cant be empty");
+
+        noinput.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        noinput.show();
+    }
+
 
     public void save(){
         //sharedpref = getSharedPreferences("shared preferences",MODE_PRIVATE);

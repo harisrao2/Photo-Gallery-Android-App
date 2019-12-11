@@ -212,13 +212,20 @@ public class MainActivity extends AppCompatActivity {
         newAlbumAlert.setPositiveButton("OK", new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which){
+                if (input.getText().toString().matches("")) {
+                    promptNoInput();
 
-                albumName = input.getText().toString();
-                System.out.println(albumName);
-                Album a = new Album(albumName, new ArrayList<Photo>() );
-                albums.add(a);
-                adapter.add(a.getAlbumName());
-                adapter.notifyDataSetChanged();
+                }else if(nameExist(albums,input.getText().toString())==true){
+                        promptDuplicateName();
+                }
+                else {
+                        albumName = input.getText().toString();
+                        System.out.println(albumName);
+                        Album a = new Album(albumName, new ArrayList<Photo>());
+                        albums.add(a);
+                        adapter.add(a.getAlbumName());
+                        adapter.notifyDataSetChanged();
+                }
 
             }
         });
@@ -233,6 +240,42 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void promptDuplicateName(){
+        AlertDialog.Builder noinput = new AlertDialog.Builder(this);
+        noinput.setMessage("That album name already exists");
+
+        noinput.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        noinput.show();
+    }
+    public boolean nameExist(ArrayList<Album> albums,String name){
+        for(int i = 0;i<albums.size();i++){
+            if(albums.get(i).getAlbumName().equals(name)){
+                System.out.println("NAME EXITSSSSSSSSSS");
+                return true;
+
+            }
+        }
+        return false;
+
+    }
+
+    public void promptNoInput(){
+        AlertDialog.Builder noinput = new AlertDialog.Builder(this);
+        noinput.setMessage("Album name cant be empty");
+
+        noinput.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        noinput.show();
+    }
 
 
     @Override
