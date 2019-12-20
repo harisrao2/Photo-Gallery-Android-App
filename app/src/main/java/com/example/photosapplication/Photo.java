@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import java.util.ArrayList;
 
 public class Photo {
-    Bitmap imageBitmap;
+    Bitmap imageBitmap= null;
     String caption = "";
 
     String location =  "";
@@ -13,6 +13,7 @@ public class Photo {
 
     public Photo (Bitmap imageBitmap, String caption){
         this.imageBitmap = imageBitmap;
+
         this.caption = caption;
     }
 

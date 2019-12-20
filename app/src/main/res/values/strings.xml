@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">PhotosApplication</string>
+    <string name="app_name">Photo Gallery</string>
     <string name="action_settings">Settings</string>
 </resources>

@@ -69,6 +69,8 @@ public class DisplayPhoto extends AppCompatActivity {
                     slideShowIndex = slideShowIndex + 1;
                 }
                 iv_displayPhoto.setImageBitmap(album.getPhotoList().get(slideShowIndex).getBitmap());
+                locationHolder.setText(album.getPhotoList().get(slideShowIndex).getLocation());
+                displayPeopleTag();
             }
         });
 
@@ -81,19 +83,21 @@ public class DisplayPhoto extends AppCompatActivity {
                     slideShowIndex = slideShowIndex - 1;
                 }
                 iv_displayPhoto.setImageBitmap(album.getPhotoList().get(slideShowIndex).getBitmap());
+                locationHolder.setText(album.getPhotoList().get(slideShowIndex).getLocation());
+                displayPeopleTag();
             }
         });
 
-        iv_displayPhoto.setImageBitmap(album.getPhotoList().get(index).getBitmap());
+        iv_displayPhoto.setImageBitmap(album.getPhotoList().get(slideShowIndex).getBitmap());
 
-        locationHolder.setText(album.getPhotoList().get(index).getLocation());
+        locationHolder.setText(album.getPhotoList().get(slideShowIndex).getLocation());
         displayPeopleTag();
     }
 
     public void displayPeopleTag(){
         String people = "";
-        for (int i = 0;i< album.getPhotoList().get(index).getPeople().size();i++){
-            people = people + album.getPhotoList().get(index).getPeople().get(i) + ", ";
+        for (int i = 0;i< album.getPhotoList().get(slideShowIndex).getPeople().size();i++){
+            people = people + album.getPhotoList().get(slideShowIndex).getPeople().get(i) + ", ";
         }
         System.out.print("ALL PEOPLEEEEEEEEEEEEEEEEEEEEE ::::::::::::::::::::::::::::::  " + people);
         peopleHolder.setText(people);

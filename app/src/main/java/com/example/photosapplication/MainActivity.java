@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-
+        load();
 
         lv_albums = (ListView) findViewById(R.id.lv_albums);
         b_newAlbum = findViewById(R.id.b_newAlbum);
@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, albumNames);
         lv_albums.setAdapter(adapter);
 
-        load();
+
+
         loadListView();
         System.out.println("printing after load : ");
         printAlbums();

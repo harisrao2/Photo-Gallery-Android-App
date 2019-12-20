@@ -22,6 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -78,7 +79,7 @@ public class PhotosScene extends AppCompatActivity {
         b_back.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                save();
+                //save();
                 finish();
             }
         });
@@ -129,7 +130,7 @@ public class PhotosScene extends AppCompatActivity {
                         // The 'which' argument contains the index position
                         // of the selected item
                         if(which==0) { // if Open
-                            save();
+                            //save();
                             openPhoto(position);
                         }
                         else if(which == 1){ // if Add tag
@@ -335,7 +336,7 @@ public class PhotosScene extends AppCompatActivity {
     }
 
     public void promptLocationTag(final int position){
-        if(albums.get(index).getPhotoList().get(position).getLocation()=="") {
+        if(albums.get(index).getPhotoList().get(position).getLocation().equals("")) {
             AlertDialog.Builder location = new AlertDialog.Builder(this);
             location.setTitle("Enter a Location");
 
@@ -446,7 +447,11 @@ public class PhotosScene extends AppCompatActivity {
             }catch (FileNotFoundException e){
                 e.printStackTrace();
             }
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(8192);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 25, bos);
             Photo p = new Photo(imageBitmap,caption);
+
             System.out.println("CAPTION :::::::::::::::: " + caption);
             albums.get(index).getPhotoList().add(p);
             System.out.println("checkkkkkkkkkkkkkkkkk :::::::::: " + albums.get(index).getPhotoList().get(0));
